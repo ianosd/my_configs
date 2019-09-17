@@ -3,18 +3,23 @@
 operation=$1
 validate() {
 	grep -F -q -x "$operation" << EOF
-setup_zsh
-setup_i3
+zsh
+tmux
 EOF
 }
 
-setup_zsh() {
+zsh() {
 	sudo usermod --shell $(which zsh) $USER
+	cp zshrc $HOME/.zshrc
+}
+
+tmux() {
+	cp tmux.conf $HOME/.tmux.conf
 }
 
 validate
 if [ $? -eq 0 ]; then
 	$operation
 else
-	printf "Invalid operation: $operation\nUsage: setup.sh setup_zsh | setup_i3\n"
+	printf "Invalid operation: $operation\nUsage: setup.sh zsh | tmux \n"
 fi
